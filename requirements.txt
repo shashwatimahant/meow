@@ -11,7 +11,6 @@ langchain-huggingface>=0.1.0,<0.2.0
 google-generativeai>=0.8.3
 
 # Vector Store
-faiss-cpu
 sentence-transformers
 torch
 sentencepiece>=0.2.0

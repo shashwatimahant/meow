@@ -1,8 +1,8 @@
 from typing import List, Dict, Any, Optional
 import numpy as np
 from langchain_community.embeddings import SentenceTransformerEmbeddings
-from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
+from langchain_core.vectorstores import InMemoryVectorStore
 from src.config import Config
 
 try:
@@ -13,7 +13,7 @@ except Exception:
 class EmbeddingManager:
     """
     Manages embeddings and retrieval using LangChain components.
-    Uses SentenceTransformerEmbeddings for embeddings and FAISS for vector storage.
+    Uses SentenceTransformerEmbeddings for embeddings and in-memory vector storage.
     """
     def __init__(self):
         # Defer embedding model creation to avoid heavy imports / device moves at app import time
@@ -70,7 +70,7 @@ class EmbeddingManager:
 
     def create_embeddings(self, documents: List[Document]):
         """
-        Creates embeddings for documents and stores them in FAISS.
+        Creates embeddings for documents and stores them in memory.
         
         Args:
             documents: List of LangChain Document objects
@@ -81,8 +81,7 @@ class EmbeddingManager:
                 return False
             # Ensure embedding model is ready (lazy init)
             self._init_embedding_model()
-            # Create FAISS index from documents using LangChain
-            self.vectorstore = FAISS.from_documents(
+            self.vectorstore = InMemoryVectorStore.from_documents(
                 documents, 
                 self.embedding_model
             )
